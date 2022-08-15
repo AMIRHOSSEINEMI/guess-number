@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/700f9cc419.js" crossorigin="anonymous"></script>
+    <title>mohandeth EMI</title>
+    <style>
+         body{
+            background-image: url('guees.png');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+        
+        .blue{
+            color: blue;
+        }
+       .red{
+           color: red;
+       }
+
+       #chances{
+           color: red;
+       }
+      .hidden{
+            display: none;
+        }
+
+
+        .hiden{
+            display: none;
+        }
+
+        #ref{
+            margin-left: 5px;
+            margin-top: 5px;
+            width: 90px;
+            background-color: rgb(70, 129, 73);
+            border-radius: 9px;
+            transition: 0.5s;
+        }
+        #ref:hover{
+             background-color: red;
+             transition: 0.5s;
+             width: 120px;
+        }
+
+        #help{
+            margin-top: 5px;
+            margin-right: 5px;
+            background-color: rgb(70, 230, 230);
+            border-radius: 9px;
+            transition: 0.5s;
+        }
+        #help:hover{
+            background-color: greenyellow;
+            transition: 0.5s;
+            width: 120px;
+        }
+
+        button{
+            height: 30px;
+            width: 80px;
+        }
+        #start{
+            background-color: rgb(51, 241, 45);
+            border: 1px solid rgb(51, 241, 45);
+            border-radius: 6px;
+            color: rgb(17, 0, 255);
+        }
+        #start:hover{
+            background-color: rgb(98, 109, 255);
+        }
+        input{
+            border: 1px black solid;
+            border-radius: 6px;
+        }
+        #guess-button{
+            background-color: rgb(51, 241, 45);
+            border: 1px solid rgb(51, 241, 45);
+            border-radius: 6px;
+            color: rgb(17, 0, 255);
+        }
+
+        .bag{
+            width: 100%;
+            height: 200px;
+        }
+
+        #stage1 , #stage2{
+            width: 100%;
+            height: 200px;
+            text-align: center;
+            
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="bag position-relative container">
+        <div class="position-absolute top-0 start-50 translate-middle-x">
+            <h1 style="color: rgb(31, 161, 26);">WICH NUMBER IS YOUR??? <i class="fas fa-dice-d6"></i> </h1>
+        </div>
+        <div class="position-absolute top-50 start-0 translate-middle-y">
+            <div id="stage3"><button id="ref" class="fa fa-arrow-circle-left">AGAIN</button></div>
+        </div>
+        <div class="position-absolute top-50 end-0 translate-middle-y">
+            <div id="stage4">
+                <button class="fa fa-question" id="help" title="GAME HELP" data-bs-toggle="popover" data-bs-content="First, enter a number of 10 or more in the box, then guess the selected number and win.
+                Note that the number of your guesses is limited.
+                Good luck">HELP</button></div>
+    </div>
+    <br><br><br><br><br><br><br><br>
+
+    <div id="stage1" class="">
+        <p style="color: rgb(251, 255, 0); font-size: 36px;">ENTER A NUMBER</p>
+        <input type="text" id="maximum" style="width: 50%;"> <br><br><br>
+        <button type="button" id="start" style="width: 50%; font-size: larger;">start</button>
+    </div>
+
+    <div id="stage2" class="hidden">
+        <p style="color: rgb(251, 255, 0); font-size: 36px;">YOU HAVE <span id="chances">0</span> CHANCES</p>
+        <input style="width: 50%;" type="text" id="guess-number"> <br><br><br>
+        <button style="width: 50%; font-size: larger;" type="button" id="guess-button">GUESS</button>
+        <p style="color: red; font-size: 30px;" id="status">Guess the numbers : </p>
+        
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/canvas-confetti@0.0.3/dist/confetti.browser.min.js'></script>
+    <script>
+    const stage1 = document.getElementById('stage1');       
+    const stage2 = document.getElementById('stage2');
+    const stage3 = document.getElementById('stage3');       
+    const maximumInput = document.getElementById('maximum');           
+    const startButton = document.getElementById('start');       
+    const guessInput = document.getElementById('guess-number');       
+    const guessButton = document.getElementById('guess-button');       
+    const chancesSpan = document.getElementById('chances');
+    const ref =  document.getElementById('ref');
+    ref.addEventListener('click',function(){
+        let answer = confirm('are you sure?');
+        if(answer){
+            window.location.reload();
+        }
+    });
+
+    let maximumNumber , totalChances , targetNumber 
+
+    startButton.addEventListener('click', startGame);
+    function startGame(){
+        maximumNumber = Number(maximumInput.value);
+        if(maximumNumber > 10){
+            targetNumber = Math.floor(Math.random() * (maximumNumber))+1;
+            totalChances = Math.floor(Math.log2(maximumNumber))+1;
+            chancesSpan.textContent = totalChances;
+            stage1.classList.toggle('hidden');
+            stage2.classList.toggle('hidden');
+
+        }else{
+            const p = document.querySelector('#stage1 p');
+            p.outerHTML = '<p class="red">MORE THAN 10 PLEAS</p>';
+        }
+    }
+
+    guessButton.addEventListener ('click' ,guess);
+    function guess(){
+        let yourGuess = Number(guessInput.value);
+        if(yourGuess == targetNumber){
+            stage2.innerHTML = '<p class="blue" style="color: rgb(223, 182, 70); font-size: 30px;" >OMG YOU WIN <i class="fas fa-grin-alt"></i></p>';
+            confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: {
+          y: 0.6
+      }
+  });
+            return;
+        }else if(yourGuess > targetNumber){
+            const status = document.getElementById('status');
+            status.innerHTML += `<span class="red"> ${yourGuess}</span> `;
+        }else{
+            const status = document.getElementById('status');
+            status.innerHTML += `<span class="blue"> ${yourGuess}</span> `;
+
+        }
+        let remainingChances = Number(chancesSpan.textContent);
+        remainingChances --;
+        if(remainingChances>0){
+            chancesSpan.textContent = remainingChances;
+        }else{
+            stage2.innerHTML = '<p class="red" style ="font-size: 36px; text-align: center;">SORRY YOU LOSE <i class="fas fa-frown"></i></p>';
+            stage2.innerHTML += `<span  style ="font-size: 36px; color:aquamarine;">THE CHOOSES NUMBER WAS : ${targetNumber}</span> `;
+
+        }
+     }
+    </script>
+    <script>
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+  return new bootstrap.Popover(popoverTriggerEl)
+})
+    </script>
+</body>
+</html>
